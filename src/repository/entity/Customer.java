@@ -22,11 +22,13 @@ import javax.persistence.Table;
 @NamedQueries({
 	@NamedQuery(name = Customer.GET_ALL_QUERY_NAME, query = "SELECT c FROM Customer c order by c.customerId desc"),
 	@NamedQuery(name = Customer.GET_BY_USER, query = "SELECT c FROM Customer c WHERE c.connectUser.username = :username order by c.customerId desc"),
+	@NamedQuery(name = Customer.GET_BY_INDUSTRY, query = "SELECT c FROM Customer c WHERE c.industryType.industryTypeId = :industryTypeId order by c.customerId desc"),
 })
 @Table(name="CUSTOMERS")
 public class Customer implements Serializable{
 	public static final String GET_ALL_QUERY_NAME = "Customer.getAll";
 	public static final String GET_BY_USER = "Customer.getByUser";
+	public static final String GET_BY_INDUSTRY = "Customer.getByIndustry";
 	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -46,9 +48,9 @@ public class Customer implements Serializable{
 	@JoinColumn(name = "connect_user")
 	private User connectUser;
 	
-	@Column(name = "industry_type")
-	@Enumerated(EnumType.STRING)
-	private IndustryType industryType = IndustryType.UNKNOWN;
+	@ManyToOne
+	@JoinColumn(name = "industry_type")
+	private IndustryType industryType;
 	
 	public Customer() {
 		
